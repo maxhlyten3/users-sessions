@@ -38,7 +38,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
-app.Urls.Add("http://127.0.0.1:5040");
 
 app.UseAuthentication();
 app.UseAuthorization();

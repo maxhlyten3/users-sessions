@@ -4,8 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
-using System;
-using System.Linq;
 using AuthApiDemo.Data;
 using AuthApiDemo.Models;
 

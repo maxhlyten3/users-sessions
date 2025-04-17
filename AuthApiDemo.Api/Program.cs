@@ -11,7 +11,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer(); 
+
+builder.Services.AddOpenApi(); 
+
+builder.Services.AddSwaggerGen();
 
 var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key");
 
@@ -43,5 +47,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.Run();

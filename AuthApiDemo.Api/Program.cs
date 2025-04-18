@@ -17,6 +17,9 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key");
 
 var key = Encoding.UTF8.GetBytes(jwtKey);

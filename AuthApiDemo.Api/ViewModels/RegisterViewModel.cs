@@ -1,6 +1,6 @@
-namespace AuthApiDemo.Models;
+namespace AuthApiDemo.ViewModels;
 
-public class RegisterModel
+public class RegisterViewModel
 {
     public string Username { get; set; }
     public string Password { get; set; }

@@ -1,4 +1,4 @@
-namespace AuthApiDemo.Models;
+namespace AuthApiDemo.ViewModels;
 
 public class LoginModel
 {

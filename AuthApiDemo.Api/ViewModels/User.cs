@@ -1,6 +1,6 @@
-namespace AuthApiDemo.Services.Models;
+namespace AuthApiDemo.ViewModels;
 
-public class User
+public class UserViewModel
 {
     public int Id { get; set; }
     public string Username { get; set; } = "";

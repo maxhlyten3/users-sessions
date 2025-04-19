@@ -1,4 +1,4 @@
-namespace AuthApiDemo.Models;
+namespace AuthApiDemo.Services.Data.Models;
 
 public class User
 {

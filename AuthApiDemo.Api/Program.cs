@@ -1,16 +1,21 @@
 using System.Text;
 using AuthApiDemo.Services.Data;
 using AuthApiDemo.Services.Implementation;
+using AuthApiDemo.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(typeof(UserProfile));
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default"), optionsBuilder =>
+    {
+        optionsBuilder.MigrationsAssembly("AuthApiDemo.Api");
+    });
+    
+});
 
 builder.Services.AddControllers();
 

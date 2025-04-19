@@ -1,3 +1,6 @@
+using AuthApiDemo.Services.Data.Models;
+using AuthApiDemo.Services.Interfaces;
+
 namespace AuthApiDemo.Services.Implementation;
 
 using AuthApiDemo.Services.Data;

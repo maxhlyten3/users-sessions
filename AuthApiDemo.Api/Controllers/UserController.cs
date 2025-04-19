@@ -1,7 +1,8 @@
+using AuthApiDemo.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using AuthApiDemo.Models;
-using AuthApiDemo.Services.Implementation;
+using AuthApiDemo.Services.Interfaces;
+using AuthApiDemo.ViewModels;
 
 namespace AuthApiDemo.Controllers
 {
@@ -19,9 +20,12 @@ namespace AuthApiDemo.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel viewModel)
         {
+            var model = viewModel.Map();
+            
             var success = await _authService.RegisterAsync(model);
+            
             if (!success)
                 return BadRequest("User already exists");
 

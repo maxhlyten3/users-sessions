@@ -1,5 +1,5 @@
+using AuthApiDemo.Services.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using AuthApiDemo.Services.Models;
 
 namespace AuthApiDemo.Services.Data;
 

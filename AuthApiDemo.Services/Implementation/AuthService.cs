@@ -3,9 +3,9 @@ namespace AuthApiDemo.Services.Implementation;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using AuthApiDemo.Data;
-using AuthApiDemo.Models;
 using Microsoft.IdentityModel.Tokens;
+using AuthApiDemo.Services.Data;
+using AuthApiDemo.Services.Models;
 
 public class AuthService : IAuthService
 {

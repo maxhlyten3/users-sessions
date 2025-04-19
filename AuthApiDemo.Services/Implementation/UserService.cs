@@ -1,7 +1,7 @@
 namespace AuthApiDemo.Services.Implementation;
 
-using AuthApiDemo.Data;
-using AuthApiDemo.Models;
+using AuthApiDemo.Services.Data;
+using AuthApiDemo.Services.Models;
 
 public class UserService : IUserService
 {

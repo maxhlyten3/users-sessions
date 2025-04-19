@@ -1,6 +1,6 @@
-using AuthApiDemo.Models;
-
 namespace AuthApiDemo.Services.Implementation;
+
+using AuthApiDemo.Services.Models;
 
 public interface IAuthService
 {

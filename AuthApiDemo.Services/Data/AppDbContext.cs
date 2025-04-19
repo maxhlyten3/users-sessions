@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using AuthApiDemo.Models;
+using AuthApiDemo.Services.Models;
 
-namespace AuthApiDemo.Data;
+namespace AuthApiDemo.Services.Data;
 
 public class AppDbContext : DbContext
 {

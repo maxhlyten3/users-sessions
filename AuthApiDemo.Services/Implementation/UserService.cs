@@ -3,8 +3,8 @@ using AuthApiDemo.Services.Interfaces;
 
 namespace AuthApiDemo.Services.Implementation;
 
-using AuthApiDemo.Services.Data;
-using AuthApiDemo.Services.Models;
+using Data;
+using Models;
 
 public class UserService : IUserService
 {

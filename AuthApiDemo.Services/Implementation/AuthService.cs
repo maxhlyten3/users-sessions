@@ -7,8 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using AuthApiDemo.Services.Data;
-using AuthApiDemo.Services.Models;
+using Data;
+using Models;
 
 public class AuthService : IAuthService
 {
@@ -21,6 +21,7 @@ public class AuthService : IAuthService
         _jwtKey = config["Jwt:Key"];
     }
 
+    //TODO: move to AuthService lol
     public async Task<User?> AuthenticateAsync(string username, string password)
     {
         var user = _db.Users.FirstOrDefault(u => u.Username == username);
@@ -46,11 +47,12 @@ public class AuthService : IAuthService
         return true;
     }
 
+    //TODO: move to JwtService
     public string GenerateJwtToken(User user)
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Name, user.Username),//TODO: include only session ID. do not include user info
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -58,10 +60,10 @@ public class AuthService : IAuthService
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: "your_issuer",
-            audience: "your_audience",
+            issuer: "your_issuer",//TODO: move to appsettings
+            audience: "your_audience",//TODO: move to appsettings
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.Now.AddHours(1), // todo move to app settings and swtich to minutes
             signingCredentials: creds
         );
 

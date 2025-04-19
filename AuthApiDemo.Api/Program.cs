@@ -10,18 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default"), optionsBuilder =>
-    {
-        optionsBuilder.MigrationsAssembly("AuthApiDemo.Api");
-    });
-    
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default"),
+        optionsBuilder => { optionsBuilder.MigrationsAssembly("AuthApiDemo.Api"); });
 });
 
 builder.Services.AddControllers();
 
-builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddOpenApi(); 
+builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
 
@@ -43,8 +40,8 @@ builder.Services.AddAuthentication(options =>
         options.SaveToken = true;
         options.TokenValidationParameters = new()
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = false, //TODO: true
+            ValidateAudience = false, //TODO: true
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };

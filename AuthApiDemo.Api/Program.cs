@@ -2,6 +2,7 @@ using System.Text;
 using AuthApiDemo.Services.Data;
 using AuthApiDemo.Services.Implementation;
 using AuthApiDemo.Services.Interfaces;
+using AuthApiDemo.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +25,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<SessionValidFilter>();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<SessionValidFilter>();
+});
 
 var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key");
 
@@ -40,8 +49,8 @@ builder.Services.AddAuthentication(options =>
         options.SaveToken = true;
         options.TokenValidationParameters = new()
         {
-            ValidateIssuer = false, //TODO: true
-            ValidateAudience = false, //TODO: true
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };

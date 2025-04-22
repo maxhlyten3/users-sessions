@@ -29,11 +29,6 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<SessionValidFilter>();
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<SessionValidFilter>();
-});
-
 var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key");
 
 var key = Encoding.UTF8.GetBytes(jwtKey);

@@ -1,39 +1,35 @@
 using AuthApiDemo.Mappers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using AuthApiDemo.Services.Interfaces;
 using AuthApiDemo.ViewModels;
-using AuthApiDemo.Utils;
 
 namespace AuthApiDemo.Controllers
 {
-    //TODO: add user profile controller. Returns user information (user email, fist name, last name).  [write custom auth attribute that checks if session is valid]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
         private readonly ISessionService _sessionService;
         private readonly int _expires;
+        private readonly IUserService _userService;
 
-        public UserController(IAuthService authService, IUserService userService, IJwtService jwtService, ISessionService sessionService, IConfiguration config)
+        public UserController(IAuthService authService, IJwtService jwtService, ISessionService sessionService, IUserService userService, IConfiguration config)
         {
             _authService = authService;
-            _userService = userService;
             _jwtService = jwtService;
             _sessionService = sessionService;
-            _expires = int.Parse(config["Jwt:ExpiresTime:Minutes"]);
+            _userService = userService;
+            _expires = int.Parse(config["Session:ExpiresTime:Minutes"]);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel viewModel)
         {
-            CredentialValidation credentialValidation = new CredentialValidation();
-            if (!credentialValidation.IsValidPassword(viewModel.Password))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("The password must be at least 8 characters long, contain at least one capital letter and one number.");
+                return BadRequest(ModelState);
             }
             
             var model = viewModel.Map();
@@ -52,30 +48,40 @@ namespace AuthApiDemo.Controllers
             var user = await _authService.AuthenticateAsync(model.Username, model.Password);
             if (user == null)
             {
-                return Unauthorized("Bad request");
+                return BadRequest();
             }
 
-            var sessionID = _sessionService.CreateSessionAsync(user.Id, TimeSpan.FromMinutes(_expires));
+            var sessionID = await _sessionService.CreateSessionAsync(user.Id, TimeSpan.FromMinutes(_expires));
             
-            var token = _jwtService.GenerateJwtToken(await sessionID);
+            var token = _jwtService.GenerateJwtToken(sessionID);
             
             return Ok(new { Token = token });
         }
 
-        //TODO: implement refresh token functionality  
-        [Authorize]
-        [ServiceFilter(typeof(SessionValidFilter))]
-        [HttpGet("profile")]
-        public IActionResult GetProfile()
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel model)
         {
-            var username = User.Identity?.Name;
-            if (string.IsNullOrEmpty(username)) return Unauthorized();
+            var session = await _sessionService.GetSessionByIdAsync(model.SessionId);
 
-            var user = _userService.GetUserByUsername(username);
-            if (user == null) return NotFound("User not found");
+            if (session == null || session.ExpirationDate < DateTime.UtcNow)
+                return Unauthorized("Session is invalid or expired");
 
-            return Ok(user);
+            if (session.RefreshToken != model.RefreshToken)
+                return Unauthorized("Refresh token does not match");
+
+            var user = await _userService.GetUserById(session.UserId);
+            if (user == null)
+                return Unauthorized("User not found");
+
+            var newJwt = _jwtService.GenerateJwtToken(session.Id);
+
+            return Ok(new
+            {
+                Token = newJwt,
+            });
         }
+
+
 
     }
 }

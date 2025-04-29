@@ -2,6 +2,7 @@ using AuthApiDemo.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using AuthApiDemo.Services.Interfaces;
 using AuthApiDemo.ViewModels;
+using Microsoft.Extensions.Options;
 
 namespace AuthApiDemo.Controllers
 {
@@ -15,13 +16,14 @@ namespace AuthApiDemo.Controllers
         private readonly int _expires;
         private readonly IUserService _userService;
 
-        public UserController(IAuthService authService, IJwtService jwtService, ISessionService sessionService, IUserService userService, IConfiguration config)
+        public UserController(IAuthService authService, IJwtService jwtService, ISessionService sessionService, IUserService userService, IOptions<SessionSettings> sessionSettings)
         {
             _authService = authService;
             _jwtService = jwtService;
+            
             _sessionService = sessionService;
             _userService = userService;
-            _expires = int.Parse(config["Session:ExpiresTime:Minutes"]);
+            _expires = sessionSettings.Value.Minutes;
         }
 
         [HttpPost("register")]

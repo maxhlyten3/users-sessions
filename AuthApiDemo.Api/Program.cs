@@ -3,6 +3,7 @@ using AuthApiDemo.Services.Data;
 using AuthApiDemo.Services.Implementation;
 using AuthApiDemo.Services.Interfaces;
 using AuthApiDemo.Utils;
+using AuthApiDemo.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<SessionSettings>(builder.Configuration.GetSection("Session:ExpiresTime"));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
